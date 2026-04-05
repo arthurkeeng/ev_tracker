@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ContactForm({url}) {
+export default function ContactForm({url,isLoading , setIsLoading}) {
   const [form, setForm] = useState({
     name: "",
     address: "",
@@ -21,7 +21,8 @@ export default function ContactForm({url}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
- 
+    setIsLoading(true)
+ try {
     await fetch(url, {
       method: "POST",
       body: JSON.stringify({
@@ -34,26 +35,42 @@ export default function ContactForm({url}) {
       mode: "no-cors"
     });
 
-    alert("Saved!");
+    alert("Submitted!");
+    setForm({
+    name: "",
+    address: "",
+    phone: "",
+    notes: ""
+  });
+ } catch (error) {
+  alert("An error occurred. Please try again.");
+ }finally{
+  setIsLoading(false);
+ }
+  
+
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h3>People Spoken To</h3>
 
-      <input name="name" placeholder="Name" onChange={handleChange} />
+      <input name="name" placeholder="Name" onChange={handleChange} value={form.name}/>
 
-      <input name="address" placeholder="Address" onChange={handleChange} />
+      <input name="address" placeholder="Address" onChange={handleChange} value={form.address} />
 
-      <input name="phone" placeholder="Phone" onChange={handleChange} />
+      <input name="phone" placeholder="Phone" onChange={handleChange} value={form.phone} />
 
       <textarea
         name="notes"
+        value={form.notes}
         placeholder="Notes"
         onChange={handleChange}
       />
 
-      <button type="submit">Submit</button>
+      <button type="submit"
+      disabled = {isLoading}
+      >{isLoading ? "Submitting..." : "Submit"}</button>
     </form>
   );
 }

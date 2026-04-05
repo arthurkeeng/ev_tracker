@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function OtherEventForm({url}) {
+export default function OtherEventForm({ url, isLoading, setIsLoading }) {
   const [form, setForm] = useState({
     title: "",
     date: "",
@@ -16,19 +16,30 @@ export default function OtherEventForm({url}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
+    try {
+      await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          data: form, sheetName: "OtherEvent"
+        }),
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      setForm({
+        title: "",
+        date: "",
+        description: ""
+      });
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
+    finally {
+      setIsLoading(false);
+    }
 
-    await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        data : form , sheetName : "OtherEvent"
-      }),
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    alert("Submitted!");
   };
 
   return (
@@ -36,6 +47,7 @@ export default function OtherEventForm({url}) {
       <h3>Other Event</h3>
 
       <input
+      value={form.title}
         name="title"
         placeholder="Event Title"
         onChange={handleChange}
@@ -43,17 +55,22 @@ export default function OtherEventForm({url}) {
 
       <input
         type="date"
+        value={form.date}
         name="date"
         onChange={handleChange}
       />
 
       <textarea
         name="description"
+        value={form.description}
         placeholder="Description"
         onChange={handleChange}
       />
 
-      <button type="submit">Submit</button>
+      <button type="submit"
+        disabled={isLoading}
+
+      >{isLoading ? "Submitting..." : "Submit"}</button>
     </form>
   );
 }

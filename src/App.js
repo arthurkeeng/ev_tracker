@@ -8,6 +8,7 @@ import OtherEventForm from "./component/OtherEventForm";
 function App() {
   let url =  "https://script.google.com/macros/s/AKfycbxrA-xDkcCO3E74m0vhbZJA6DCIa-yanSslkNqiP69BhkW3yYdzWGVofmhUN3BJQ19s/exec"
   const [activeForm, setActiveForm] = useState("event");
+  const [isLoading , setIsLoading] = useState(false)
 
   return (
     <div className="container">
@@ -37,9 +38,9 @@ function App() {
         </button>
       </div>
 
-      {activeForm === "event" && <EventAttendanceForm url = {url}/>}
-      {activeForm === "contact" && <ContactForm url = {url}/>}
-      {activeForm === "other" && <OtherEventForm url = {url}/>}
+      {activeForm === "event" && <EventAttendanceForm url = {url} isLoading = {isLoading} setIsLoading = {setIsLoading} />}
+      {activeForm === "contact" && <ContactForm url = {url} isLoading = {isLoading} setIsLoading = {setIsLoading}/>}
+      {activeForm === "other" && <OtherEventForm url = {url} isLoading = {isLoading} setIsLoading = {setIsLoading}/>}
 
     </div>
   );
