@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export default function EventAttendanceForm({url}) {
-  let sheetId = "1hkPwW87v4zjLh7LnArFtCiltjfINNuC9zGMpL9n6r9o"
   const [form, setForm] = useState({
     name: "",
     email: "",
